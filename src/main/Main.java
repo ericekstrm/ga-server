@@ -82,7 +82,7 @@ public class Main extends Frame {
         add(logWindow);
 
         try {
-            logFile = new PrintWriter("C:\\Users\\Eric\\Desktop\\logfile.txt", "UTF-8");
+            logFile = new PrintWriter(System.getProperty("user.home") + "\\Desktop\\logfile.txt", "UTF-8");
         } catch (FileNotFoundException ex) {
             System.out.println("error creating logfile");
         } catch (UnsupportedEncodingException ex) {
