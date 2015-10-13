@@ -3,13 +3,20 @@ package main;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
-import java.net.*;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import javax.swing.JTextArea;
 
 public class Main extends Frame {
 
+    ClientSocket client;
+    CarSocket car;
+    
+    //Files for the log
+    public static final String newLine = "\n";
+    public static JTextArea logWindow;
+    public static PrintWriter logFile;
+    
     public static void main(String[] args) {
         new Main();
     }
@@ -17,8 +24,8 @@ public class Main extends Frame {
     public Main() {
         super("GA Server");
         setSize(400, 400);
+        setLocationRelativeTo(null);
 
-        createMenuBar();
         createLog();
 
         addWindowListener(new WindowAdapter() {
@@ -30,51 +37,9 @@ public class Main extends Frame {
 
         setVisible(true);
 
-        createSocket();
+        ClientSocket client = new ClientSocket();
+        CarSocket car = new CarSocket();
     }
-
-    MenuBar menuBar;
-    Menu menu;
-    MenuItem menuItem;
-
-    private void createMenuBar() {
-
-        //Create the menu bar.
-        menuBar = new MenuBar();
-
-        //Build the first menu.
-        menu = new Menu("A Menu");
-        menuBar.add(menu);
-
-        //a group of JMenuItems
-        menuItem = new MenuItem("A text-only menu item");
-        menu.add(menuItem);
-
-        menuItem = new MenuItem("Both text and icon");
-        menu.add(menuItem);
-
-        menuItem = new MenuItem("HEJ");
-        menu.add(menuItem);
-
-        menu.addSeparator();
-
-        menuItem = new MenuItem("Exit");
-        Frame f = this;
-        menuItem.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                dispatchEvent(new WindowEvent(f, WindowEvent.WINDOW_CLOSING));
-            }
-        });
-        menu.add(menuItem);
-
-        setMenuBar(menuBar);
-    }
-
-    public static final String newLine = "\n";
-    public JTextArea logWindow;
-    PrintWriter logFile;
 
     private void createLog() {
         logWindow = new JTextArea();
@@ -82,15 +47,15 @@ public class Main extends Frame {
         add(logWindow);
 
         try {
+            //Create a new logfile on the Desktop
+            //Probobly only works for windows
             logFile = new PrintWriter(System.getProperty("user.home") + "\\Desktop\\logfile.txt", "UTF-8");
-        } catch (FileNotFoundException ex) {
-            System.out.println("error creating logfile");
-        } catch (UnsupportedEncodingException ex) {
+        } catch (FileNotFoundException | UnsupportedEncodingException ex) {
             System.out.println("error creating logfile");
         }
     }
 
-    private void puchToLog(String s) {
+    public static void puchToLog(String s) {
 
         Calendar cal = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -100,22 +65,5 @@ public class Main extends Frame {
 
         logWindow.append(output);
         logFile.println(output);
-    }
-
-    Socket clientSocket;
-    PrintWriter out;
-    BufferedReader in;
-    int portNumber = 8080;
-
-    private void createSocket() {
-        try {
-            ServerSocket serverSocket = new ServerSocket(portNumber);
-            clientSocket = serverSocket.accept();
-            puchToLog("Connection established on IP:" + clientSocket.getInetAddress());
-            out = new PrintWriter(clientSocket.getOutputStream(), true);
-            in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 }
