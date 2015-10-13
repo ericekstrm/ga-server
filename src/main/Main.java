@@ -8,7 +8,13 @@ import java.util.Calendar;
 import javax.swing.JTextArea;
 
 public class Main extends Frame {
+    
+    //Message to send to Clients
+    //Consists of 3 Chars
+    public static String message;
 
+    //All connected Sockets
+    //Max one Car and as many clients as you want
     ClientSocket client;
     CarSocket car;
     

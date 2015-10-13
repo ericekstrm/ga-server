@@ -35,9 +35,9 @@ public class CarSocket implements Runnable {
         }
     }
     
-    public void getMessages(){
+    public synchronized void sendMessages(){
         while (true) {
-            
+            out.print(Main.message);
         }
     }
 }

@@ -4,6 +4,8 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ClientSocket implements Runnable {
 
@@ -34,9 +36,15 @@ public class ClientSocket implements Runnable {
         }
     }
     
-    public void sendMessages(){
+    public synchronized void getMessages(){
         while (true) {
-            
+            for (BufferedReader br : ins) {
+                try {
+                    //väntar på att elias bestämmer vad han ska skicka
+                    Main.message = br.readLine();
+                } catch (IOException ex) {
+                }
+            }
         }
     }
 }
