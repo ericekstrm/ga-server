@@ -8,9 +8,9 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class CarSocket implements Runnable {
-    
-    int portNumber = 1234;
-    
+
+    int portNumber = 25566;
+
     Socket socket;
     BufferedReader in;
     PrintWriter out;
@@ -18,26 +18,30 @@ public class CarSocket implements Runnable {
     public CarSocket() {
         Thread th = new Thread(this);
         th.start();
+        sendMessages();
     }
 
     @Override
     public void run() {
-        while (true) {
-            try {
-                ServerSocket serverSocket = new ServerSocket(portNumber);
-                socket = serverSocket.accept();
-                Main.puchToLog("Car connection established on IP:" + socket.getInetAddress());
-                out = new PrintWriter(socket.getOutputStream(), true);
-                in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        Main.puchToLog("Lisening for Car connection");
+        try {
+            ServerSocket serverSocket = new ServerSocket(portNumber);
+            socket = serverSocket.accept();
+            Main.puchToLog("Car connection established on IP:" + socket.getInetAddress());
+            out = new PrintWriter(socket.getOutputStream(), true);
+            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            Main.puchToLog("Stoped listening for car connection");
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+        sendMessages();
     }
-    
-    public synchronized void sendMessages(){
+
+    public synchronized void sendMessages() {
         while (true) {
-            out.print(Main.message);
+            if (out != null) {
+                out.print(Main.message);
+            }
         }
     }
 }

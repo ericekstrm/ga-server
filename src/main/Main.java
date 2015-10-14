@@ -43,8 +43,8 @@ public class Main extends Frame {
 
         setVisible(true);
 
-        ClientSocket client = new ClientSocket();
-        CarSocket car = new CarSocket();
+        client = new ClientSocket();
+        car = new CarSocket();
     }
 
     private void createLog() {
