@@ -8,7 +8,7 @@ import java.util.Calendar;
 import javax.swing.JTextArea;
 
 public class Main extends Frame {
-    
+
     //Message to send to Clients
     //Consists of 3 Chars
     public static String message;
@@ -17,12 +17,12 @@ public class Main extends Frame {
     //Max one Car and as many clients as you want
     ClientSocket client;
     CarSocket car;
-    
+
     //Files for the log
     public static final String newLine = "\n";
     public static JTextArea logWindow;
     public static PrintWriter logFile;
-    
+
     public static void main(String[] args) {
         new Main();
     }

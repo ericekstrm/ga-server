@@ -37,10 +37,10 @@ public class CarSocket implements Runnable {
         sendMessages();
     }
 
-    public synchronized void sendMessages() {
+    public void sendMessages() {
         while (true) {
             if (out != null) {
-                out.print(Main.message);
+                out.println(Main.message);
             }
         }
     }

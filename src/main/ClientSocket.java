@@ -26,18 +26,19 @@ public class ClientSocket implements Runnable {
 
     @Override
     public void run() {
-        while (true) {
-            Main.puchToLog("Lisening for Client connection");
-            try {
-                ServerSocket serverSocket = new ServerSocket(portNumber);
+        ServerSocket serverSocket;
+        try {
+            serverSocket = new ServerSocket(portNumber);
+            while (true) {
+                Main.puchToLog("Lisening for Client connection");
+
                 Socket socket = serverSocket.accept();
                 sockets.add(socket);
                 Main.puchToLog("Client connection established on IP:" + socket.getInetAddress());
                 outs.add(new PrintWriter(socket.getOutputStream(), true));
                 ins.add(new BufferedReader(new InputStreamReader(socket.getInputStream())));
-            } catch (IOException e) {
-                e.printStackTrace();
             }
+        } catch (IOException ex) {
         }
     }
 
@@ -53,11 +54,11 @@ public class ClientSocket implements Runnable {
             getMessages();
         }
 
-        public synchronized void getMessages() {
+        public void getMessages() {
             while (true) {
                 for (BufferedReader br : ins) {
                     try {
-                        //väntar på att Elias bestämmer vad han gör med livet
+                        new Reader();
                         Main.message = br.readLine();
                     } catch (IOException ex) {
                     }
