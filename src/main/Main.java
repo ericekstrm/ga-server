@@ -12,12 +12,13 @@ public class Main extends Frame {
     //Message to send to Clients
     //Consists of 3 Chars
     public static String message;
+    public static final Object lock1 = new Object();
 
     //All connected Sockets
     //Max one Car and as many clients as you want
-    ClientSocket client;
+    ClientConnect client;
     CarSocket car;
-
+    
     //Files for the log
     public static final String newLine = "\n";
     public static JTextArea logWindow;
@@ -43,7 +44,7 @@ public class Main extends Frame {
 
         setVisible(true);
 
-        client = new ClientSocket();
+        client = new ClientConnect();
         car = new CarSocket();
     }
 
