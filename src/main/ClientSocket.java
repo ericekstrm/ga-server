@@ -25,10 +25,8 @@ public class ClientSocket implements Runnable {
         while (true) {
             try {
                 String s = in.readLine();
-                System.out.println(Main.message);
-                synchronized (Main.lock1) {
-                    Main.message = s;
-                }
+                System.out.println(s);
+                Main.message = s;
             } catch (IOException ex) {
             }
         }
