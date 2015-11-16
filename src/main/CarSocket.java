@@ -6,6 +6,8 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class CarSocket implements Runnable {
 
@@ -18,7 +20,17 @@ public class CarSocket implements Runnable {
     public CarSocket() {
         Thread th = new Thread(this);
         th.start();
-        sendMessages();
+        
+        while (true) {
+            try {
+                if (in.readLine().equals("d")) {
+                    socket.close();
+                    th.start();
+                    Main.pushToLog("Car Disconnected");
+                }
+            } catch (IOException ex) {
+            }
+        }
     }
 
     @Override
@@ -38,7 +50,7 @@ public class CarSocket implements Runnable {
     }
 
     public void sendMessages() {
-        while (true) {
+        while (!socket.isClosed()) {
             if (out != null) {
                 out.println(Main.message);
             }

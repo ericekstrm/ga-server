@@ -10,17 +10,21 @@ public class ClientConnect implements Runnable {
     int portNumber = 25565;
 
     ArrayList<ClientSocket> sockets;
-    ArrayList<BufferedReader> ins;
     ArrayList<PrintWriter> outs;
 
     public ClientConnect() {
 
         sockets = new ArrayList<>();
-        ins = new ArrayList<>();
-        outs = new ArrayList<>();
 
         Thread th = new Thread(this);
         th.start();
+        
+        
+        while (true) {
+            if (sockets.isEmpty()) {
+                Main.message = "128 128 128";
+            }
+        }
     }
 
     @Override
@@ -32,7 +36,7 @@ public class ClientConnect implements Runnable {
                 Main.pushToLog("Lisening for Client connection");
 
                 Socket socket = serverSocket.accept();
-                sockets.add(new ClientSocket(socket));
+                sockets.add(new ClientSocket(socket,sockets));
                 Main.pushToLog("Client connection established on IP:" + socket.getInetAddress());
             }
         } catch (IOException ex) {
