@@ -38,6 +38,7 @@ public class Main extends Frame {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                logFile.close();
                 System.exit(0);
             }
         });
@@ -62,7 +63,7 @@ public class Main extends Frame {
         }
     }
 
-    public static void puchToLog(String s) {
+    public static void pushToLog(String s) {
 
         Calendar cal = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

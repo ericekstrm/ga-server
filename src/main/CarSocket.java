@@ -23,14 +23,14 @@ public class CarSocket implements Runnable {
 
     @Override
     public void run() {
-        Main.puchToLog("Lisening for Car connection");
+        Main.pushToLog("Lisening for Car connection");
         try {
             ServerSocket serverSocket = new ServerSocket(portNumber);
             socket = serverSocket.accept();
-            Main.puchToLog("Car connection established on IP:" + socket.getInetAddress());
+            Main.pushToLog("Car connection established on IP:" + socket.getInetAddress());
             out = new PrintWriter(socket.getOutputStream(), true);
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            Main.puchToLog("Stoped listening for car connection");
+            Main.pushToLog("Stoped listening for car connection");
         } catch (IOException e) {
             e.printStackTrace();
         }

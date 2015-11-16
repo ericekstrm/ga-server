@@ -29,11 +29,11 @@ public class ClientConnect implements Runnable {
         try {
             serverSocket = new ServerSocket(portNumber);
             while (true) {
-                Main.puchToLog("Lisening for Client connection");
+                Main.pushToLog("Lisening for Client connection");
 
                 Socket socket = serverSocket.accept();
                 sockets.add(new ClientSocket(socket));
-                Main.puchToLog("Client connection established on IP:" + socket.getInetAddress());
+                Main.pushToLog("Client connection established on IP:" + socket.getInetAddress());
             }
         } catch (IOException ex) {
         }
