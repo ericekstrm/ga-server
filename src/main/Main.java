@@ -5,7 +5,7 @@ import java.awt.event.*;
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import javax.swing.JTextArea;
+import javax.swing.BoxLayout;
 
 public class Main extends Frame {
 
@@ -18,11 +18,16 @@ public class Main extends Frame {
     //Max one Car and as many clients as you want
     ClientConnect client;
     CarSocket car;
-    
+
     //Files for the log
-    public static final String newLine = "\n";
-    public static JTextArea logWindow;
-    public static PrintWriter logFile;
+    public static TextArea logWindow;
+    public static BufferedWriter logFile;
+
+    public static Panel debugPanel;
+    public static TextField area1;
+    public static TextField area2;
+    public static TextField area3;
+    public static TextField area4;
 
     public static void main(String[] args) {
         new Main();
@@ -30,15 +35,34 @@ public class Main extends Frame {
 
     public Main() {
         super("GA Server");
-        setSize(400, 400);
+        setSize(500, 400);
         setLocationRelativeTo(null);
+        setResizable(false);
 
         createLog();
+
+        debugPanel = new Panel();
+        debugPanel.setLayout(new BoxLayout(debugPanel, BoxLayout.Y_AXIS));
+        area1 = new TextField("Message: ");
+        debugPanel.add(area1);
+        area2 = new TextField("Sockets: ");
+        debugPanel.add(area2);
+        area3 = new TextField("east");
+        debugPanel.add(area3);
+        area4 = new TextField("west");
+        debugPanel.add(area4);
+        add(debugPanel, BorderLayout.SOUTH);
+
+        message = "128 128 128";
 
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                logFile.close();
+                try {
+                    logFile.close();
+                } catch (IOException ex) {
+                    System.out.println("Couldn't Save LogFile");
+                }
                 System.exit(0);
             }
         });
@@ -50,28 +74,38 @@ public class Main extends Frame {
     }
 
     private void createLog() {
-        logWindow = new JTextArea();
+        logWindow = new TextArea();
         logWindow.setEditable(false);
-        add(logWindow);
+        add(logWindow, BorderLayout.NORTH);
 
         try {
             //Create a new logfile on the Desktop
             //Probobly only works for windows
-            logFile = new PrintWriter(System.getProperty("user.home") + "\\Desktop\\logfile.txt", "UTF-8");
-        } catch (FileNotFoundException | UnsupportedEncodingException ex) {
-            System.out.println("error creating logfile");
+            SimpleDateFormat sdf = new SimpleDateFormat("yy-MM-dd");
+            String time = (sdf.format(Calendar.getInstance().getTime()));
+            File file = new File(System.getProperty("user.home")
+                    + "\\Desktop\\logFiler\\" + time + ".txt");
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+            FileWriter fw = new FileWriter(file.getAbsoluteFile());
+            logFile = new BufferedWriter(fw);
+        } catch (IOException ex) {
         }
     }
 
     public static void pushToLog(String s) {
-
         Calendar cal = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-dd-dd HH:mm:ss");
         String time = (sdf.format(cal.getTime()));
 
-        String output = time + " - " + s + newLine;
+        String output = time + " - " + s + "\n";
 
         logWindow.append(output);
-        logFile.println(output);
+        try {
+            logFile.append(output);
+            logFile.newLine();
+        } catch (IOException ex) {
+        }
     }
 }
