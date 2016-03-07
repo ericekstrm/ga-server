@@ -12,7 +12,6 @@ public class Main extends Frame {
     //Message to send to Clients
     //Consists of 3 Chars
     public static String message;
-    public static final Object lock1 = new Object();
 
     //All connected Sockets
     //Max one Car and as many clients as you want
@@ -26,12 +25,6 @@ public class Main extends Frame {
     public static Panel debugPanel;
     public static TextField area1;
     public static TextField area2;
-    public static TextField area3;
-    public static TextField area4;
-
-    public static void main(String[] args) {
-        new Main();
-    }
 
     public Main() {
         super("GA Server");
@@ -47,10 +40,6 @@ public class Main extends Frame {
         debugPanel.add(area1);
         area2 = new TextField("Sockets: ");
         debugPanel.add(area2);
-        area3 = new TextField("east");
-        debugPanel.add(area3);
-        area4 = new TextField("west");
-        debugPanel.add(area4);
         add(debugPanel, BorderLayout.SOUTH);
 
         message = "128 128 128";
@@ -58,10 +47,11 @@ public class Main extends Frame {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                Main.pushToLog("Closing Server, prepare for the end!");
                 try {
                     logFile.close();
                 } catch (IOException ex) {
-                    System.out.println("Couldn't Save LogFile");
+                    ex.printStackTrace();
                 }
                 System.exit(0);
             }
@@ -73,7 +63,14 @@ public class Main extends Frame {
         car = new CarSocket();
     }
 
+    private static Calendar cal;
+    private static SimpleDateFormat sdf;
+
     private void createLog() {
+        
+        cal = Calendar.getInstance();
+        sdf = new SimpleDateFormat("yyyy-dd-dd HH:mm:ss");
+
         logWindow = new TextArea();
         logWindow.setEditable(false);
         add(logWindow, BorderLayout.NORTH);
@@ -82,30 +79,37 @@ public class Main extends Frame {
             //Create a new logfile on the Desktop
             //Probobly only works for windows
             SimpleDateFormat sdf = new SimpleDateFormat("yy-MM-dd");
-            String time = (sdf.format(Calendar.getInstance().getTime()));
+            String time = (sdf.format(cal.getTime()));
             File file = new File(System.getProperty("user.home")
-                    + "\\Desktop\\logFiler\\" + time + ".txt");
+                    + "\\Desktop\\" + time + ".txt");
             if (!file.exists()) {
                 file.createNewFile();
             }
-            FileWriter fw = new FileWriter(file.getAbsoluteFile());
+            FileWriter fw = new FileWriter(file.getAbsoluteFile(), true);
             logFile = new BufferedWriter(fw);
         } catch (IOException ex) {
+            ex.printStackTrace();
         }
+        pushToLog("Server Started");
     }
 
     public static void pushToLog(String s) {
-        Calendar cal = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-dd-dd HH:mm:ss");
-        String time = (sdf.format(cal.getTime()));
+        if (logFile != null) {
+            String time = sdf.format(cal.getTime());
 
-        String output = time + " - " + s + "\n";
+            String output = time + " - " + s + "\n";
 
-        logWindow.append(output);
-        try {
-            logFile.append(output);
-            logFile.newLine();
-        } catch (IOException ex) {
+            logWindow.append(output);
+            try {
+                logFile.write(output);
+                logFile.newLine();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
         }
+    }
+
+    public static void main(String[] args) {
+        new Main();
     }
 }
