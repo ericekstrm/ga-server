@@ -34,15 +34,15 @@ public class Main extends Frame {
 
         createLog();
 
+        message = "128 128 128";
+        
         debugPanel = new Panel();
         debugPanel.setLayout(new BoxLayout(debugPanel, BoxLayout.Y_AXIS));
-        area1 = new TextField("Message: ");
+        area1 = new TextField("Message: " + message);
         debugPanel.add(area1);
         area2 = new TextField("Sockets: ");
         debugPanel.add(area2);
         add(debugPanel, BorderLayout.SOUTH);
-
-        message = "128 128 128";
 
         addWindowListener(new WindowAdapter() {
             @Override
@@ -53,7 +53,7 @@ public class Main extends Frame {
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
-                System.exit(0);
+                System.exit(-1);
             }
         });
 
