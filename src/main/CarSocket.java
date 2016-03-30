@@ -56,8 +56,6 @@ public class CarSocket {
                         }
                     }
                 }
-                Main.pushToLog("Car Connection Lost");
-                new Thread(search).start();
             }
         };
 
@@ -68,6 +66,8 @@ public class CarSocket {
                     try {
                         if ((char) in.read() == 'd') {
                             socket.close();
+                            Main.pushToLog("Car Connection Lost");
+                            new Thread(search).start();
                         }
                     } catch (IOException ex) {
                     }

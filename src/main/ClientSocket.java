@@ -29,12 +29,13 @@ public class ClientSocket implements Runnable {
             try {
                 s = in.readLine();
                 if (s.equals("d")) {
+                    //disconnects this socket
                     socket.close();
                     sockets.remove(this);
-                    area2.setText("Sockets: " + sockets.size());
+                    connectedSockets.setText("Sockets: " + sockets.size());
                     Main.pushToLog("Client on IP: " + socket.getInetAddress() + " Disconnected");
                 } else {
-                    //Validera inkommande medelande
+                    //Validate incoming message
                     String[] subs = s.split(" ");
                     for (String sub : subs) {
                         while (sub.length() < 3) {
@@ -44,7 +45,7 @@ public class ClientSocket implements Runnable {
                     s = subs[0] + " " + subs[1] + " " + subs[2];
 
                     Main.message = s;
-                    area1.setText("Message: " + message);
+                    currentMessage.setText("Message: " + message);
                 }
             } catch (IOException ex) {
             }

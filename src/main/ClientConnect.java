@@ -13,7 +13,6 @@ public class ClientConnect implements Runnable {
     public static ArrayList<ClientSocket> sockets;
 
     public ClientConnect() {
-
         sockets = new ArrayList<>();
 
         Thread th = new Thread(this);
@@ -22,6 +21,7 @@ public class ClientConnect implements Runnable {
 
     @Override
     public void run() {
+        //Lisening for clients to connect util the end of time
         ServerSocket serverSocket;
         try {
             serverSocket = new ServerSocket(portNumber);
@@ -31,7 +31,7 @@ public class ClientConnect implements Runnable {
                 Socket socket = serverSocket.accept();
                 sockets.add(new ClientSocket(socket));
                 Main.pushToLog("Client connection established on IP:" + socket.getInetAddress());
-                area2.setText("Sockets: " + sockets.size());
+                connectedSockets.setText("Sockets: " + sockets.size());
             }
         } catch (IOException ex) {
         }

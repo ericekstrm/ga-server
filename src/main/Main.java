@@ -23,8 +23,8 @@ public class Main extends Frame {
     public static BufferedWriter logFile;
 
     public static Panel debugPanel;
-    public static TextField area1;
-    public static TextField area2;
+    public static TextField currentMessage;
+    public static TextField connectedSockets;
 
     public Main() {
         super("GA Server");
@@ -38,10 +38,10 @@ public class Main extends Frame {
         
         debugPanel = new Panel();
         debugPanel.setLayout(new BoxLayout(debugPanel, BoxLayout.Y_AXIS));
-        area1 = new TextField("Message: " + message);
-        debugPanel.add(area1);
-        area2 = new TextField("Sockets: ");
-        debugPanel.add(area2);
+        currentMessage = new TextField("Message: " + message);
+        debugPanel.add(currentMessage);
+        connectedSockets = new TextField("Sockets: ");
+        debugPanel.add(connectedSockets);
         add(debugPanel, BorderLayout.SOUTH);
 
         addWindowListener(new WindowAdapter() {
@@ -76,8 +76,7 @@ public class Main extends Frame {
         add(logWindow, BorderLayout.NORTH);
 
         try {
-            //Create a new logfile on the Desktop
-            //Probobly only works for windows
+            //Create a new logfile on the Desktop with the current date as the name 
             SimpleDateFormat sdf = new SimpleDateFormat("yy-MM-dd");
             String time = (sdf.format(cal.getTime()));
             File file = new File(System.getProperty("user.home")
