@@ -51,7 +51,7 @@ public class CarSocket {
                     if (out != null) {
                         out.println(Main.message);
                         try {
-                            Thread.sleep(100);
+                            Thread.sleep(200);
                         } catch (InterruptedException ex) {
                         }
                     }
